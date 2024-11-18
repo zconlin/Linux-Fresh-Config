@@ -1,16 +1,11 @@
 #!/bin/bash
 
 # Initializing the setup script
-echo "##############################################"
-echo "            INITIALIZING SETUP SCRIPT         "
-echo "##############################################"
+echo "Initializing the setup script..."
 echo "Updating and upgrading system packages..."
-# sudo apt update && sudo apt upgrade -y
+sudo apt update && sudo apt upgrade -y
 
 #### SETUP FILE STRUCTURE ####
-echo ""
-echo ""
-echo ""
 echo "##############################################"
 echo "            SETTING UP FILESYSTEM             "
 echo "##############################################"
@@ -20,9 +15,6 @@ echo "Creating 'Applications' directory in the home folder..."
 mkdir -p $HOME/Applications
 
 #### INSTALL APPLICATIONS ####
-echo ""
-echo ""
-echo ""
 echo "##############################################"
 echo "           INSTALLING APPLICATIONS            "
 echo "##############################################"
@@ -44,14 +36,27 @@ chmod +x $HOME/Applications/Ghidra/ghidraRun
 echo "Creating '.local/share/applications' directory if not already present..."
 mkdir -p $HOME/.local/share/applications
 
-echo "Customizing 'Ghidra.desktop' file with user home directory..."
+echo "Customizing 'Ghidra.desktop' to include the '07 - Reverse Engineering' category..."
 sed -i "s/{HOME}/$(echo $HOME | sed 's/\//\\\//g')/g" ./init/ghidra/Ghidra.desktop
+sed -i "s/Categories=.*/Categories=07-ReverseEngineering;Development;/g" ./init/ghidra/Ghidra.desktop
 
 echo "Copying 'Ghidra.desktop' to local applications menu and desktop..."
 cp ./init/ghidra/Ghidra.desktop $HOME/.local/share/applications
 chmod +x $HOME/.local/share/applications/Ghidra.desktop
 cp ./init/ghidra/Ghidra.desktop $HOME/Desktop
 chmod +x $HOME/Desktop/Ghidra.desktop
+
+echo "Installing 'Ghidra.desktop' to the applications menu..."
+xdg-desktop-menu install --novendor $HOME/.local/share/applications/Ghidra.desktop
+
+echo "Creating '07-ReverseEngineering.directory' for the app menu..."
+mkdir -p $HOME/.local/share/desktop-directories
+cat << EOF > $HOME/.local/share/desktop-directories/07-ReverseEngineering.directory
+[Desktop Entry]
+Name=07 - Reverse Engineering
+Icon=preferences-system
+Type=Directory
+EOF
 
 echo "Copying Ghidra icon to the Ghidra application directory..."
 cp ./init/ghidra/ghidra_icon_white.png $HOME/Applications/Ghidra
@@ -60,9 +65,6 @@ echo "Installing OpenJDK 24..."
 sudo apt install openjdk-24-jdk -y
 
 # End of the setup script
-echo ""
-echo ""
-echo ""
 echo "##############################################"
 echo "        SETUP SCRIPT COMPLETED SUCCESSFULLY    "
 echo "##############################################"
