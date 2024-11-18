@@ -7,7 +7,7 @@ sudo apt update && sudo apt upgrade -y
 
 #### SETUP FILE STRUCTURE ####
 echo "##############################################"
-echo "            SETTING UP FILESYSTEM             "
+echo "SETTING UP FILESYSTEM"
 echo "##############################################"
 echo "Creating 'downloads' directory..."
 mkdir -p ./downloads
@@ -16,7 +16,7 @@ mkdir -p $HOME/Applications
 
 #### INSTALL APPLICATIONS ####
 echo "##############################################"
-echo "           INSTALLING APPLICATIONS            "
+echo "INSTALLING APPLICATIONS"
 echo "##############################################"
 
 # Ghidra
@@ -36,27 +36,14 @@ chmod +x $HOME/Applications/Ghidra/ghidraRun
 echo "Creating '.local/share/applications' directory if not already present..."
 mkdir -p $HOME/.local/share/applications
 
-echo "Customizing 'Ghidra.desktop' to include the '07 - Reverse Engineering' category..."
+echo "Customizing 'Ghidra.desktop' file with user home directory..."
 sed -i "s/{HOME}/$(echo $HOME | sed 's/\//\\\//g')/g" ./init/ghidra/Ghidra.desktop
-sed -i "s/Categories=.*/Categories=07-ReverseEngineering;Development;/g" ./init/ghidra/Ghidra.desktop
 
 echo "Copying 'Ghidra.desktop' to local applications menu and desktop..."
 cp ./init/ghidra/Ghidra.desktop $HOME/.local/share/applications
 chmod +x $HOME/.local/share/applications/Ghidra.desktop
 cp ./init/ghidra/Ghidra.desktop $HOME/Desktop
 chmod +x $HOME/Desktop/Ghidra.desktop
-
-echo "Installing 'Ghidra.desktop' to the applications menu..."
-xdg-desktop-menu install --novendor $HOME/.local/share/applications/Ghidra.desktop
-
-echo "Creating '07-ReverseEngineering.directory' for the app menu..."
-mkdir -p $HOME/.local/share/desktop-directories
-cat << EOF > $HOME/.local/share/desktop-directories/07-ReverseEngineering.directory
-[Desktop Entry]
-Name=07 - Reverse Engineering
-Icon=preferences-system
-Type=Directory
-EOF
 
 echo "Copying Ghidra icon to the Ghidra application directory..."
 cp ./init/ghidra/ghidra_icon_white.png $HOME/Applications/Ghidra
@@ -66,5 +53,6 @@ sudo apt install openjdk-24-jdk -y
 
 # End of the setup script
 echo "##############################################"
-echo "        SETUP SCRIPT COMPLETED SUCCESSFULLY    "
+echo "SETUP SCRIPT COMPLETED SUCCESSFULLY"
 echo "##############################################"
+echo ""
