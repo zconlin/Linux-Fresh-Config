@@ -1,19 +1,13 @@
 # Initializing the setup script
 echo "Initializing the setup script..."
+sudo apt update && sudo apt upgrade -y
 
 #### SETUP FILE STRUCTURE ####
 echo "##############################################"
 echo "            SETTING UP FILESYSTEM             "
 echo "##############################################"
-mkdir ./downloads
-mkdir $HOME/Applications
-
-# .bash_profile and .bashrc
-cat ./setup_files/bash/.bash_profile_additions >> $HOME/.bash_profile
-cat ./setup_files/bash/.bashrc_additions >> $HOME/.bashrc
-
-source $HOME/.bash_profile
-source $HOME/.bashrc
+mkdir -p ./downloads
+mkdir -p $HOME/Applications
 
 #### INSTALL APPLICATIONS ####
 echo "##############################################"
@@ -27,7 +21,7 @@ mkdir -p $HOME/Applications
 unzip -q ./downloads/Ghidra.zip -d $HOME/Applications
 mv $HOME/Applications/ghidra_* $HOME/Applications/Ghidra
 chmod +x $HOME/Applications/Ghidra/ghidraRun
-mkdir $HOME/.local/share/applications
-sed -i "s/{HOME}/$(echo $HOME | sed 's/\//\\\//g')/g" ./setup_files/ghidra/Ghidra.desktop
-cp ./setup_files/ghidra/Ghidra.desktop $HOME/.local/share/applications
-cp ./setup_files/ghidra/ghidra_icon_white.png $HOME/Applications/Ghidra
+mkdir -p $HOME/.local/share/applications
+sed -i "s/{HOME}/$(echo $HOME | sed 's/\//\\\//g')/g" ./init/ghidra/Ghidra.desktop
+cp ./init/ghidra/Ghidra.desktop $HOME/.local/share/applications
+cp ./init/ghidra/ghidra_icon_white.png $HOME/Applications/Ghidra
