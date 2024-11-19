@@ -1,11 +1,14 @@
 #!/bin/bash
 
-# Initializing the setup script
-echo "Initializing the setup script..."
+#### SET UP FILE STRUCTURE ####
+echo "##############################################"
+echo "INITIALIZING THE SETUP SCRIPT"
+echo "##############################################"
 echo "Updating and upgrading system packages..."
 sudo apt update && sudo apt upgrade -y
 
-#### SETUP FILE STRUCTURE ####
+#### SET UP FILE STRUCTURE ####
+echo ""
 echo "##############################################"
 echo "SETTING UP FILESYSTEM"
 echo "##############################################"
@@ -15,6 +18,7 @@ echo "Creating 'Applications' directory in the home folder..."
 mkdir -p $HOME/Applications
 
 #### INSTALL APPLICATIONS ####
+echo ""
 echo "##############################################"
 echo "INSTALLING APPLICATIONS"
 echo "##############################################"
@@ -51,8 +55,33 @@ cp ./init/ghidra/ghidra_icon_white.png $HOME/Applications/Ghidra
 echo "Installing OpenJDK 24..."
 sudo apt install openjdk-24-jdk -y
 
+#### SET UP ZSHRC ####
+echo ""
+echo "##############################################"
+echo "SETTING UP ZSHRC"
+echo "##############################################"
+
+# Adding ntfy to zshrc if not already present
+if ! grep -q "curl -d \"\${1:-Command finished executing}\" ntfy.sh/z-command-notification" ~/.zshrc; then
+  echo "Creating notify alias."
+  NOTIFY_FUNC='
+  notify() {
+    curl -d "${1:-Command finished executing}" ntfy.sh/z-command-notification
+  }
+  '
+  echo "Adding notify function to .zshrc..."
+  echo "$NOTIFY_FUNC" >> ~/.zshrc
+else
+  echo "The notify function is already present in your .zshrc."
+fi
+
+# Sourcing .zshrc
+source ~/.zshrc
+
 # End of the setup script
+echo ""
 echo "##############################################"
 echo "SETUP SCRIPT COMPLETED SUCCESSFULLY"
+echo "Reload your .zshrc with: source ~/.zshrc"
 echo "##############################################"
 echo ""
